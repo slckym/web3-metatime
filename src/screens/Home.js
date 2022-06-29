@@ -23,7 +23,7 @@ const Home = () => {
           extraData: block.extraData,
           miner: block.miner,
           nonce: block.nonce,
-          price: utils.fromWei(block.baseFeePerGas.toString(), 'ether'),
+          price: (utils.fromWei(block.baseFeePerGas.toString(), 'ether') / 1000000).toString().slice(0,5),
         });
         let transaction = await eth.getTransactionReceipt(block.transactions[0]);
         latestTransactionsArray.push({
@@ -34,7 +34,7 @@ const Home = () => {
           hash: transaction.hash,
           nonce: transaction.nonce,
           to: transaction.to,
-          value: utils.fromWei(transaction.effectiveGasPrice.toString(), 'ether'),
+          value: (utils.fromWei(transaction.effectiveGasPrice.toString(), 'ether')  / 1000000).toString().slice(0,5),
         });
       }
       setLatestTransactions(latestTransactionsArray);
@@ -44,7 +44,7 @@ const Home = () => {
   useEffect(() => {
     fetchLatestBlockNumber().then();
     // eslint-disable-next-line
-  }, [lib]);
+  }, [lib, eth.getBlockNumber()]);
   return (
       <Row>
         <Col>
